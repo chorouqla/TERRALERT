@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}TERRA ALERT | Análisis{% endblock %}
+{% block content %}
+<section class="analysis-hero">
+  <div class="analysis-hero-copy">
+    <p class="eyebrow"><span class="eyebrow-orbit">✦</span> OBSERVATORIO · EM-DAT</p>
+    <h1>Leer los patrones de nuestro planeta</h1>
+    <p class="subtitle">Una exploración de la frecuencia, el impacto humano y la distribución geográfica de los desastres naturales registrados entre 1900 y 2025.</p>
+    <div class="hero-tags"><span>1900—2025</span><span>230 países y territorios</span><span>Datos EM-DAT</span></div>
+  </div>
+  <div class="analysis-orbit-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit-planet">✦</div><span class="orbit-star star-a">✧</span><span class="orbit-star star-b">·</span><span class="orbit-star star-c">✦</span></div>
+</section>
+
+<section class="stats-grid analysis-kpis">
+  <article class="stat-card"><span class="stat-label">REGISTROS ANALIZADOS</span><strong>{{ "{:,}".format(stats.total).replace(",", ".") }}</strong><span class="stat-description">Registros de desastres naturales</span></article>
+  <article class="stat-card"><span class="stat-label">FALLECIMIENTOS REPORTADOS</span><strong>{{ "{:,}".format(stats.deaths).replace(",", ".") }}</strong><span class="stat-description">Suma de valores disponibles</span></article>
+  <article class="stat-card"><span class="stat-label">PERSONAS AFECTADAS</span><strong>{{ "{:,}".format(stats.affected).replace(",", ".") }}</strong><span class="stat-description">Suma de valores disponibles</span></article>
+  <article class="stat-card"><span class="stat-label">PAÍSES Y TERRITORIOS</span><strong>{{ stats.countries }}</strong><span class="stat-description">Representados en el conjunto de datos</span></article>
+</section>
+
+<div class="analysis-intro-note"><span class="note-icon">ⓘ</span><p><strong>Cómo leer este análisis:</strong> los registros muestran desastres reportados, no necesariamente todos los fenómenos ocurridos. Los indicadores de fallecimientos y personas afectadas solo suman los valores disponibles; los datos ausentes no se interpretan como cero.</p></div>
+
+<section class="analysis-section" id="evolucion">
+ <div class="section-heading analysis-section-heading"><div><p class="eyebrow">01 · EVOLUCIÓN TEMPORAL</p><h2>¿Cómo cambia el impacto a lo largo del tiempo?</h2><p class="section-lead">Compara hasta cinco tipos de desastre y observa sus tendencias anuales.</p></div><span class="section-index">01</span></div>
+ <article class="chart-card analysis-panel">
+  <div class="panel-heading"><div><span class="panel-kicker">TENDENCIAS HISTÓRICAS</span><h3>Evolución anual por tipo de desastre</h3></div><span class="chart-kind">GRÁFICO DE LÍNEAS</span></div>
+  <div class="analysis-controls analysis-controls-main">
+   <label>Año inicial<input id="time-start" type="number" min="1900" max="2025" value="2000"></label>
+   <label>Año final<input id="time-end" type="number" min="1900" max="2025" value="2025"></label>
+   <label class="metric-control">Indicador<select id="time-metric"><option value="records">Número de registros</option><option value="deaths">Fallecimientos reportados</option><option value="affected">Personas afectadas</option></select></label>
+  </div>
+  <div class="selection-block"><div class="selection-heading"><div><strong>Tipos de desastre</strong><span>Selecciona hasta 5 para mantener la comparación legible.</span></div><div class="selection-tools"><button type="button" class="text-button" id="time-select-top">Ver principales</button><button type="button" class="text-button" id="time-clear-types">Limpiar</button></div></div><div id="time-type-options" class="choice-grid" aria-label="Tipos de desastre"></div></div>
+  <div class="chart-actions"><span id="time-selection-count" class="selection-count">Se mostrarán los principales tipos</span><button class="primary-button" id="update-time" type="button">Actualizar análisis <span>→</span></button></div>
+  <div class="chart-frame"><img class="analysis-chart" id="time-chart" src="/api/analysis/series.png?group=type&start=2000&end=2025&metric=records" alt="Evolución anual de los tipos de desastre"></div>
+  <p class="dynamic-insight" id="time-insight" aria-live="polite">Preparando interpretación de los datos…</p>
+  <p class="chart-caption">Cada línea representa un tipo de desastre. Los años sin registros aparecen como cero para la frecuencia; en los indicadores humanos, los periodos sin datos disponibles se muestran como interrupciones.</p>
+ </article>
+</section>
+
+<section class="analysis-section" id="impacto">
+ <div class="section-heading analysis-section-heading"><div><p class="eyebrow">02 · FRECUENCIA E IMPACTO</p><h2>No es lo mismo ocurrir más que causar más daño</h2><p class="section-lead">Identifica qué categorías aparecen con mayor frecuencia y cuáles concentran el impacto humano reportado.</p></div><span class="section-index">02</span></div>
+ <article class="chart-card analysis-panel">
+  <div class="panel-heading"><div><span class="panel-kicker">RANKING DE CATEGORÍAS</span><h3>¿Qué tipos de desastre destacan?</h3></div><span class="chart-kind">BARRAS HORIZONTALES</span></div>
+  <div class="analysis-controls ranking-controls">
+   <label>Indicador<select id="disaster-ranking-metric"><option value="records">Número de registros</option><option value="deaths">Fallecimientos reportados</option><option value="affected">Personas afectadas</option></select></label>
+   <label>Año inicial<input id="disaster-rank-start" type="number" min="1900" max="2025" value="1900"></label>
+   <label>Año final<input id="disaster-rank-end" type="number" min="1900" max="2025" value="2025"></label>
+  </div>
+  <div class="chart-actions"><span class="selection-count">Orden descendente · Todas las categorías</span><button class="primary-button" id="update-disaster-ranking" type="button">Actualizar ranking <span>→</span></button></div>
+  <div class="chart-frame"><img class="analysis-chart" id="disaster-ranking-chart" src="/api/analysis/disaster-ranking.png?metric=records&start=1900&end=2025" alt="Ranking de tipos de desastre por indicador"></div>
+  <p class="dynamic-insight" id="disaster-ranking-insight" aria-live="polite">Preparando interpretación de los datos…</p>
+  <p class="chart-caption">El ranking compara totales dentro del periodo elegido. Los indicadores humanos incluyen únicamente los registros con información disponible, por lo que conviene interpretar también su cobertura.</p>
+ </article>
+</section>
+
+<section class="analysis-section" id="geografia">
+ <div class="section-heading analysis-section-heading"><div><p class="eyebrow">03 · DISTRIBUCIÓN GEOGRÁFICA</p><h2>¿Dónde se concentran los registros y el impacto?</h2><p class="section-lead">Primero identifica las zonas con mayor impacto; después compara la evolución de países concretos.</p></div><span class="section-index">03</span></div>
+ <article class="chart-card analysis-panel">
+  <div class="panel-heading"><div><span class="panel-kicker">COMPARACIÓN GEOGRÁFICA</span><h3>Ranking de regiones y países</h3></div><span class="chart-kind">BARRAS HORIZONTALES</span></div>
+  <div class="analysis-controls ranking-controls">
+   <label>Ámbito<select id="geo-level"><option value="region">Regiones EM-DAT</option><option value="country">Países (top 10)</option></select></label>
+   <label>Indicador<select id="geo-ranking-metric"><option value="records">Número de registros</option><option value="deaths">Fallecimientos reportados</option><option value="affected">Personas afectadas</option></select></label>
+   <label>Año inicial<input id="rank-start" type="number" min="1900" max="2025" value="1900"></label>
+   <label>Año final<input id="rank-end" type="number" min="1900" max="2025" value="2025"></label>
+  </div>
+  <div class="chart-actions"><span class="selection-count">Comparación según el indicador seleccionado</span><button class="primary-button" id="update-ranking" type="button">Actualizar ranking <span>→</span></button></div>
+  <div class="chart-frame"><img class="analysis-chart" id="geo-ranking-chart" src="/api/analysis/ranking.png?level=region&metric=records&start=1900&end=2025" alt="Ranking geográfico de desastres"></div>
+  <p class="dynamic-insight" id="geo-ranking-insight" aria-live="polite">Preparando interpretación de los datos…</p>
+  <p class="chart-caption">Las regiones son las categorías geográficas disponibles en EM-DAT. Los rankings nacionales muestran los diez valores más altos, no una medida de riesgo ajustada por población o superficie.</p>
+ </article>
+
+ <article class="chart-card analysis-panel country-comparison-panel">
+  <div class="panel-heading"><div><span class="panel-kicker">TENDENCIAS ENTRE PAÍSES</span><h3>Comparar la evolución de varios países</h3><p class="chart-description">Busca países por nombre y añádelos para comparar sus curvas en el mismo periodo.</p></div><span class="chart-kind">LÍNEAS COMPARATIVAS</span></div>
+  <div class="country-search-wrap"><label for="geo-country-search">Buscar países</label><input id="geo-country-search" type="search" list="geo-country-suggestions" placeholder="Empieza a escribir: Marruecos, España…" autocomplete="off"><datalist id="geo-country-suggestions"></datalist><div id="geo-selected-countries" class="selected-country-chips" aria-live="polite"><span class="picker-hint">Añade entre 2 y 8 países para comparar</span></div><select id="geo-countries" multiple hidden aria-hidden="true"></select></div>
+  <div class="analysis-controls ranking-controls country-compare-controls">
+   <label>Año inicial<input id="geo-start" type="number" min="1900" max="2025" value="2000"></label>
+   <label>Año final<input id="geo-end" type="number" min="1900" max="2025" value="2025"></label>
+   <label>Indicador<select id="geo-metric"><option value="records">Número de registros</option><option value="deaths">Fallecimientos reportados</option><option value="affected">Personas afectadas</option></select></label>
+  </div>
+  <div class="chart-actions"><span id="geo-selection-count" class="selection-count">Sin países seleccionados</span><div class="action-group"><button class="secondary-button" id="clear-countries" type="button">Limpiar</button><button class="primary-button" id="update-geo-series" type="button">Comparar países <span>→</span></button></div></div>
+  <div class="chart-frame"><p class="chart-placeholder" id="geo-series-placeholder">Selecciona países y pulsa «Comparar países» para visualizar sus tendencias.</p><img class="analysis-chart" id="geo-series-chart" alt="Evolución comparada de países" hidden></div>
+  <p class="dynamic-insight" id="geo-series-insight" aria-live="polite">Añade países para generar una interpretación comparativa.</p>
+  <p class="chart-caption">Recomendamos comparar de 2 a 5 países. Las cifras absolutas no están ajustadas por población, por lo que reflejan volumen registrado y no vulnerabilidad relativa.</p>
+ </article>
+</section>
+
+<section class="analysis-section" id="pais-detalle">
+ <div class="section-heading analysis-section-heading"><div><p class="eyebrow">04 · EXPLORACIÓN DE UN PAÍS</p><h2>Investiga el historial de un país</h2><p class="section-lead">Filtra su historial y descubre qué categorías aparecen con mayor frecuencia o impacto.</p></div><span class="section-index">04</span></div>
+ <article class="chart-card analysis-panel country-detail-panel">
+  <div class="panel-heading"><div><span class="panel-kicker">PERFIL NACIONAL</span><h3>Análisis detallado</h3></div><span class="chart-kind">FILTROS DINÁMICOS</span></div>
+  <div class="analysis-controls country-detail-controls">
+   <label>País<select id="country-analysis"><option value="">Selecciona un país</option></select></label>
+   <label>Tipo de desastre<select id="country-type"><option value="">Todos los tipos</option></select></label>
+   <label>Año inicial<input id="country-start" type="number" min="1900" max="2025" value="2000"></label>
+   <label>Año final<input id="country-end" type="number" min="1900" max="2025" value="2025"></label>
+   <label>Indicador<select id="country-metric"><option value="records">Número de registros</option><option value="deaths">Fallecimientos reportados</option><option value="affected">Personas afectadas</option></select></label>
+  </div>
+  <div class="chart-actions"><span id="country-summary" class="selection-count">Selecciona un país para comenzar.</span><button class="primary-button" id="update-country" type="button">Actualizar perfil <span>→</span></button></div>
+  <div class="detail-chart-grid">
+   <div class="detail-chart-card"><div class="mini-chart-heading"><strong>Evolución histórica</strong><span>Por año</span></div><div class="chart-frame"><img class="analysis-chart" id="country-chart" alt="Evolución histórica del indicador del país" hidden></div></div>
+   <div class="detail-chart-card"><div class="mini-chart-heading"><strong>Impacto por tipo de desastre</strong><span>Comparación de categorías</span></div><div class="chart-frame"><img class="analysis-chart" id="country-types-chart" alt="Comparación del indicador por tipo de desastre" hidden></div></div>
+  </div>
+  <p class="dynamic-insight" id="country-insight" aria-live="polite">Selecciona un país para obtener una interpretación.</p>
+  <p class="chart-caption">Al elegir un tipo concreto, ambos gráficos se centran en ese tipo. Con “Todos los tipos”, el segundo gráfico permite identificar las categorías más relevantes del país.</p>
+ </article>
+</section>
+
+<section class="methodology-note analysis-methodology"><p class="eyebrow">METODOLOGÍA Y LIMITACIONES</p><h2>Interpretar los datos con contexto</h2><div class="methodology-grid"><p><strong>Registros, no todos los fenómenos.</strong> Cada fila representa un registro país-desastre de EM-DAT. Un mismo desastre que afecta a varios países puede aparecer en más de un registro.</p><p><strong>Datos incompletos.</strong> En este archivo, hay información de fallecimientos en el 72,1 % de los registros y de personas afectadas en el 74,1 %. Un dato ausente no significa que el impacto haya sido cero.</p><p><strong>Comparaciones prudentes.</strong> La cobertura histórica y los criterios de registro pueden cambiar con el tiempo. Los totales absolutos tampoco miden el riesgo por habitante.</p></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/analysis.js') }}" defer></script>{% endblock %}

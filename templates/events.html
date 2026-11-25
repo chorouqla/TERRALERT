@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}TERRA ALERT | Eventos{% endblock %}
+
+{% block content %}
+
+<section class="intro">
+    <div>
+        <p class="eyebrow">BASE DE DATOS HISTÓRICA</p>
+        <h1>Explorador de eventos</h1>
+        <p class="subtitle">
+            Busca, filtra y consulta los registros de desastres naturales
+            documentados entre 1900 y 2025.
+        </p>
+    </div>
+</section>
+
+<section class="events-panel">
+
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">BÚSQUEDA AVANZADA</p>
+            <h2>Encuentra un evento</h2>
+        </div>
+    </div>
+
+    <div class="events-filters">
+
+        <div class="filter-group search-filter">
+            <label for="event-search">Buscar</label>
+            <input type="search" id="event-search" placeholder="País, tipo de desastre o ubicación...">
+        </div>
+
+        <div class="filter-group">
+            <label for="region-filter">Continente / región</label>
+            <select id="region-filter"><option value="">Todas las regiones</option></select>
+        </div>
+
+        <div class="filter-group">
+            <label for="country-filter">País</label>
+            <select id="country-filter"><option value="">Todos los países</option></select>
+        </div>
+
+        <div class="filter-group">
+            <label for="year-from">Desde el año</label>
+            <input type="number" id="year-from" min="1900" max="2025" value="1900">
+        </div>
+
+        <div class="filter-group">
+            <label for="year-to">Hasta el año</label>
+            <input type="number" id="year-to" min="1900" max="2025" value="2025">
+        </div>
+
+        <div class="filter-group">
+            <label for="disaster-type">Tipo de desastre</label>
+            <select id="disaster-type">
+                <option value="">Todos los tipos</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="sort1">Ordenar principalmente por</label>
+            <select id="sort1">
+                <option value="year">Año</option>
+                <option value="country">País</option>
+                <option value="type">Tipo de desastre</option>
+                <option value="deaths">Fallecidos</option>
+                <option value="affected">Personas afectadas</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="sort-order">Orden</label>
+            <select id="sort-order">
+                <option value="desc">Descendente</option>
+                <option value="asc">Ascendente</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="events-actions">
+        <button type="button" id="apply-filters" class="primary-button">
+            <span>⌕</span> Aplicar filtros
+        </button>
+
+        <button type="button" id="reset-filters" class="secondary-button">
+            Restablecer
+        </button>
+    </div>
+
+</section>
+
+<section class="events-results">
+
+    <div class="section-heading events-results-heading">
+        <div>
+            <p class="eyebrow">RESULTADOS</p>
+            <h2>Registros encontrados</h2>
+        </div>
+
+        <span id="results-count" class="results-count">
+            Cargando...
+        </span>
+    </div>
+
+    <div id="events-loading" class="events-message">
+        Cargando registros...
+    </div>
+
+    <div id="events-error" class="events-message error-message" hidden>
+        No se han podido cargar los registros. Inténtalo de nuevo.
+    </div>
+
+    <div id="events-empty" class="events-message" hidden>
+        No se encontraron eventos con estos criterios.
+        Prueba a cambiar los filtros.
+    </div>
+
+    <div class="events-table-wrapper">
+        <table class="events-table">
+            <thead>
+                <tr>
+                    <th>Año</th>
+                    <th>País</th>
+                    <th>Tipo de desastre</th>
+                    <th>Fallecidos</th>
+                    <th>Afectados</th>
+                    <th>Detalles</th>
+                </tr>
+            </thead>
+
+            <tbody id="events-table-body">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination-container">
+        <p id="pagination-info">Mostrando 0 registros</p>
+
+        <div id="pagination" class="pagination">
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/events.js') }}"></script>
+{% endblock %}
