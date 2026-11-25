@@ -1,4 +1,5 @@
 # TERRA ALERT
+Enlace del host: Chla.pythonanywhere.com
 
 **TERRA ALERT** es una aplicación web de visualización y análisis de desastres naturales. Permite explorar registros históricos, consultar información geográfica y comparar la evolución de distintos tipos de desastre y países.
 
